@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.5">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Avro_Producer" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="kafka_bootstrap_server" elementType="Argument">
+              <stringProp name="Argument.name">kafka_bootstrap_server</stringProp>
+              <stringProp name="Argument.value">pkc-4rz0k.us-east-1.aws.confluent.cloud</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="kafka_topic_producer" elementType="Argument">
+              <stringProp name="Argument.name">kafka_topic_producer</stringProp>
+              <stringProp name="Argument.value">qa.queuing.PLIM.PRODUCT_STYLE_MASTER</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="kafka_schema_registry" elementType="Argument">
+              <stringProp name="Argument.name">kafka_schema_registry</stringProp>
+              <stringProp name="Argument.value">https://psrc-q25x7.us-east-2.aws.confluent.cloud</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+          </collectionProp>
+        </Arguments>
+        <hashTree/>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Initiate Connection - JSR223 Sampler" enabled="true">
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="script">import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import java.util.Properties;
+
+Properties props1 = new Properties();
+
+props1.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,&quot;${kafka_bootstrap_server}:9092&quot;);
+props1.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,&quot;org.apache.kafka.common.serialization.StringSerializer&quot;); 	
+props1.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,&quot;org.apache.kafka.common.serialization.StringSerializer&quot;);
+//props1.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,&quot;io.confluent.kafka.serializers.KafkaAvroSerializer&quot;);
+props1.put(&quot;schema.registry.url&quot;,&quot;${kafka_schema_registry}&quot;);
+props1.put(&quot;sasl.mechanism&quot;,&quot;PLAIN&quot;);
+props1.put(&quot;security.protocol&quot;,&quot;SASL_SSL&quot;);
+props1.put(&quot;basic.auth.credentials.source&quot;,&quot;USER_INFO&quot;);
+props1.put(&quot;basic.auth.user.info&quot;,&quot;HSUQ7IVOVKNJPNTR:lgRm/DRyechi0bZhj10eFPqb8Y3kMyDVs2infYrsMB8Y0L/bgbsOA4izJosNzhMc&quot;);
+
+KafkaProducer producer = new KafkaProducer(props1);
+
+
+</stringProp>
+          <stringProp name="scriptLanguage">groovy</stringProp>
+        </JSR223Sampler>
+        <hashTree/>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Send Record - JSR223 Sampler" enabled="true">
+          <stringProp name="scriptLanguage">groovy</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="script">import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import java.util.Properties;
+import org.json.JSONObject;
+
+KafkaProduecr producer = props.get(&quot;producer&quot;);
+
+JSONObject.jsonObject = new JSONObject();
+jsonObject.put(&quot;dummy&quot;,{
+  \&quot;headers\&quot;: {
+    \&quot;b3\&quot;: \&quot;47d4e56c6d8dba6c-30248f6fc8251c0a-0\&quot;
+  },
+  \&quot;key\&quot;: \&quot;LM5602T\&quot;,
+  \&quot;value\&quot;: {
+    \&quot;style_id\&quot;: \&quot;LM5602T\&quot;,
+    \&quot;style_name\&quot;: \&quot;Great Wall Pant Tall\&quot;,
+    \&quot;data_last_updated_ts\&quot;: \&quot;11/30/2022 00:18:06\&quot;,
+    \&quot;data_created_ts\&quot;: \&quot;04/19/2022 09:50:18\&quot;,
+    \&quot;brand_id\&quot;: 100,
+    \&quot;brand_num\&quot;: 100,
+    \&quot;brand_name\&quot;: \&quot;lululemon\&quot;,
+    \&quot;division_id\&quot;: 100120,
+    \&quot;division_num\&quot;: 120,
+    \&quot;division_name\&quot;: \&quot;lulu Mens\&quot;,
+    \&quot;department_id\&quot;: 100120305,
+    \&quot;department_num\&quot;: 305,
+    \&quot;department_name\&quot;: \&quot;Mens Bottoms\&quot;,
+    \&quot;class_id\&quot;: 100120305514,
+    \&quot;class_name\&quot;: \&quot;Mens Pants\&quot;,
+    \&quot;class_num\&quot;: 514,
+    \&quot;subclass_id\&quot;: 100120305514730,
+    \&quot;subclass_num\&quot;: 730,
+    \&quot;subclass_name\&quot;: \&quot;Mens Pull On\&quot;,
+    \&quot;activity_level_1\&quot;: \&quot;Performance\&quot;,
+    \&quot;activity_level_2\&quot;: \&quot;Own\&quot;,
+    \&quot;activity_level_3\&quot;: \&quot;Train\&quot;,
+    \&quot;activity_specific\&quot;: \&quot;Essential Sweat\&quot;,
+    \&quot;anti_stink\&quot;: \&quot;No\&quot;,
+    \&quot;back_detail\&quot;: null,
+    \&quot;backrise\&quot;: null,
+    \&quot;branded_fabric\&quot;: \&quot;Other\&quot;,
+    \&quot;built_in_bra\&quot;: null,
+    \&quot;class_rollup\&quot;: \&quot;Performance Other\&quot;,
+    \&quot;class_rollup_2\&quot;: null,
+    \&quot;closet_slots\&quot;: \&quot;Active\&quot;,
+    \&quot;closure\&quot;: null,
+    \&quot;cold_weather\&quot;: null,
+    \&quot;coverage\&quot;: null,
+    \&quot;cup_construction\&quot;: null,
+    \&quot;cup_intention\&quot;: null,
+    \&quot;current_season_code\&quot;: \&quot;COR\&quot;,
+    \&quot;elevated_franchise_waterfall\&quot;: \&quot;Other Bottoms\&quot;,
+    \&quot;fabric_family\&quot;: \&quot;Other\&quot;,
+    \&quot;fit\&quot;: \&quot;Classic\&quot;,
+    \&quot;flex_season_code\&quot;: \&quot;18-3FA\&quot;,
+    \&quot;flex_status\&quot;: \&quot;Active\&quot;,
+    \&quot;flex_style_name\&quot;: null,
+    \&quot;franchise\&quot;: \&quot;Other\&quot;,
+    \&quot;function\&quot;: null,
+    \&quot;gender\&quot;: \&quot;Mens\&quot;,
+    \&quot;growth_drivers\&quot;: null,
+    \&quot;height\&quot;: null,
+    \&quot;hemline\&quot;: null,
+    \&quot;inseam\&quot;: \&quot;34.0\&quot;,
+    \&quot;inseam_bucket\&quot;: \&quot;34\&quot;-38\&quot; Pants\&quot;,
+    \&quot;inseam_uom\&quot;: \&quot;Inches\&quot;,
+    \&quot;insulation_type\&quot;: null,
+    \&quot;key_item\&quot;: \&quot;No\&quot;,
+    \&quot;leg_opening\&quot;: \&quot;Classic\&quot;,
+    \&quot;length\&quot;: \&quot;Mid\&quot;,
+    \&quot;length_technical\&quot;: null,
+    \&quot;liner_shorts\&quot;: null,
+    \&quot;ms_core_seasonal\&quot;: null,
+    \&quot;mvt_artwork\&quot;: null,
+    \&quot;master_style_id\&quot;: \&quot;107665\&quot;,
+    \&quot;master_style_name\&quot;: \&quot;Great Wall Pant\&quot;,
+    \&quot;merch_fabric_family\&quot;: null,
+    \&quot;midsole_material\&quot;: null,
+    \&quot;multi_single\&quot;: null,
+    \&quot;neckline\&quot;: null,
+    \&quot;otm_sweat\&quot;: null,
+    \&quot;otw_bucket\&quot;: null,
+    \&quot;otw_function\&quot;: null,
+    \&quot;one_mindful_attribute\&quot;: \&quot;No\&quot;,
+    \&quot;opening\&quot;: null,
+    \&quot;own_activities\&quot;: \&quot;Train\&quot;,
+    \&quot;parent_style_id\&quot;: \&quot;LM5602T\&quot;,
+    \&quot;personal_care_brand\&quot;: null,
+    \&quot;pod\&quot;: \&quot;Bottoms\&quot;,
+    \&quot;price_band\&quot;: null,
+    \&quot;price_bracket\&quot;: \&quot;Good\&quot;,
+    \&quot;price_bucket\&quot;: null,
+    \&quot;product_development_pod\&quot;: \&quot;M No Sweat\&quot;,
+    \&quot;product_line\&quot;: \&quot;M No Sweat\&quot;,
+    \&quot;product_size_definition\&quot;: \&quot;Mens--XXS-5XL:XXS-5XL\&quot;,
+    \&quot;product_type\&quot;: null,
+    \&quot;product_type_category\&quot;: null,
+    \&quot;recycled_content\&quot;: \&quot;No\&quot;,
+    \&quot;rise\&quot;: null,
+    \&quot;seasonality\&quot;: null,
+    \&quot;secondary_silhouette\&quot;: null,
+    \&quot;segments\&quot;: \&quot;Performance\&quot;,
+    \&quot;self_fabric\&quot;: \&quot;Swift Micro Twill Cordura Solid 141gsm Quickdry Wicking\&quot;,
+    \&quot;shelf\&quot;: null,
+    \&quot;silhouette\&quot;: \&quot;Pull On\&quot;,
+    \&quot;size_personal_care\&quot;: null,
+    \&quot;size_range\&quot;: \&quot;XXS, XS, S, M, L, XL, XXL, 2XL, 3XL, 4XL, 5XL\&quot;,
+    \&quot;size_scale\&quot;: \&quot;E\&quot;,
+    \&quot;sizing\&quot;: null,
+    \&quot;sleeve_length\&quot;: null,
+    \&quot;sleeve_length_technical\&quot;: null,
+    \&quot;special_program\&quot;: null,
+    \&quot;style_bucket\&quot;: null,
+    \&quot;support\&quot;: null,
+    \&quot;swim_activity\&quot;: null,
+    \&quot;taxonomy\&quot;: \&quot;100.120.305.514.730\&quot;,
+    \&quot;waistband\&quot;: \&quot;Flat\&quot;,
+    \&quot;weight\&quot;: null,
+    \&quot;why_we_made_this\&quot;: \&quot;Whether your adventures take\&quot;
+  }
+});
+
+log.info(&quot;JsonDat:&quot; + jsonObject.toString());
+
+ProducerRecord&lt;Object, String&gt; record = new ProducerRecord&lt;&gt;(&quot;${kafka_topic_producer}&quot;,jsonObject.toString());
+producer.send(record);
+</stringProp>
+        </JSR223Sampler>
+        <hashTree/>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Close Connection - JSR223 Sampler" enabled="true">
+          <stringProp name="scriptLanguage">groovy</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="script">import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+
+KafkaProducer producer = props.get(&quot;producer&quot;);
+producer.close();</stringProp>
+        </JSR223Sampler>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

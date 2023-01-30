@@ -1,0 +1,610 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.5">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">true</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Setup - Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration">300</stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="kafka_bootstrap_server" elementType="Argument">
+              <stringProp name="Argument.name">kafka_bootstrap_server</stringProp>
+              <stringProp name="Argument.value">pkc-4rz0k.us-east-1.aws.confluent.cloud</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="kafka_topic_producer" elementType="Argument">
+              <stringProp name="Argument.name">kafka_topic_producer</stringProp>
+              <stringProp name="Argument.value">qa.queuing.PLIM.PRODUCT_STYLE_MASTER</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="kafka_schema_registry" elementType="Argument">
+              <stringProp name="Argument.name">kafka_schema_registry</stringProp>
+              <stringProp name="Argument.value">https://psrc-q25x7.us-east-2.aws.confluent.cloud</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+          </collectionProp>
+        </Arguments>
+        <hashTree/>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Initiate Connection - JSR223 Sampler" enabled="true">
+          <stringProp name="cacheKey">false</stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="script">import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import java.util.Properties;
+
+Properties props1 = new Properties();
+props1.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, &quot;${kafka_bootstrap_server}:9092&quot;);
+props1.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, org.apache.kafka.common.serialization.StringSerializer.class);
+props1.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, io.confluent.kafka.serializers.KafkaAvroSerializer.class);
+
+props1.put(&quot;schema.registry.url&quot;, &quot;${kafka_schema_registry}&quot;);
+props1.put(&quot;auto.register.schemas&quot;, &quot;false&quot;);
+props1.put(&quot;basic.auth.credentials.source&quot;,&quot;USER_INFO&quot;);
+props1.put(&quot;basic.auth.user.info&quot;,&quot;HSUQ7IVOVKNJPNTR:lgRm/DRyechi0bZhj10eFPqb8Y3kMyDVs2infYrsMB8Y0L/bgbsOA4izJosNzhMc&quot;);
+props1.put(&quot;sasl.mechanism&quot;, &quot;PLAIN&quot;);
+props1.put(&quot;security.protocol&quot;, &quot;SASL_SSL&quot;);
+props1.put(&quot;sasl.jaas.config&quot;,&quot;org.apache.kafka.common.security.plain.PlainLoginModule required username=&apos;QC3B5BJNY6FGUSCV&apos; password=&apos;TYzOksMewp7SVP5XbKIW+hGJiscKuVSWPJEqfxCnpq2ZkKpAJlIPjsaAFHtY8CFA&apos;;&quot;);
+KafkaProducer producer = new KafkaProducer(props1);
+
+props.put(&quot;producer&quot;, producer);
+</stringProp>
+          <stringProp name="scriptLanguage">groovy</stringProp>
+        </JSR223Sampler>
+        <hashTree/>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Iterator - Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <intProp name="LoopController.loops">-1</intProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">2</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration">300</stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="DataSet" enabled="true">
+          <stringProp name="filename">/Users/ssamal/Downloads/apache-jmeter-5.5/Data/KafkaProducer_PRODUCT_STYLE_MASTER.csv</stringProp>
+          <stringProp name="fileEncoding"></stringProp>
+          <stringProp name="variableNames">stylename,brandid,brandnum,brandname,divisionid,divisionnum,divisionname,departmentid,departmentnum,departmentname,classid,classname,classnum,subclassid,subclassnum,subclassname,activityspecific,antistink,backdetail,backrise,brandedfabric,builtinbra,classrollup,classrollup2,closetslots,coldweather,coverage,cupconstruction,cupintention,currentseasoncode,elevatedfranchisewaterfall,fabricfamily,fit,flexseasoncode,flexstatus,franchise,gender,growthdrivers,hemline,inseam,inseambucket,inseamuom,insulationtype,keyitem,legopening,length,linershorts,mscoreseasonal,mvtartwork,masterstyleid,masterstylename,merchfabricfamily,multisingle,neckline,otmsweat,otwbucket,otwfunction,onemindfulattribute,ownactivities,parentstyleid,personalcarebrand,pod,priceband,pricebracket,pricebucket,productdevelopmentpod,productline,producttype,producttypecategory,recycledcontent,rise,seasonality,secondarysilhouette,segments,selffabric,shelf,silhouette,sizepersonalcare,sizing,sleevelength,specialprogram,stylebucket,support,swimactivity,taxonomy,waistband,weight,whywemadethis</stringProp>
+          <boolProp name="ignoreFirstLine">true</boolProp>
+          <stringProp name="delimiter">,</stringProp>
+          <boolProp name="quotedData">false</boolProp>
+          <boolProp name="recycle">true</boolProp>
+          <boolProp name="stopThread">false</boolProp>
+          <stringProp name="shareMode">shareMode.all</stringProp>
+        </CSVDataSet>
+        <hashTree/>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Send Record - JSR223 Sampler" enabled="true">
+          <stringProp name="cacheKey">false</stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="script">import org.apache.avro.Schema;
+import org.apache.avro.generic.GenericData;
+import org.apache.avro.generic.GenericRecord;
+
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import java.util.Properties;
+import org.apache.kafka.common.serialization.StringSerializer;
+import io.confluent.kafka.serializers.KafkaAvroSerializer;
+
+
+KafkaProducer producer = props.get(&quot;producer&quot;);
+
+String styleSchema = &quot;{\&quot;type\&quot;:\&quot;record\&quot;,\&quot;name\&quot;:\&quot;style\&quot;,\&quot;namespace\&quot;:\&quot;com.lululemon.plim.data.export.kafka.avro\&quot;,\&quot;fields\&quot;:[{\&quot;name\&quot;:\&quot;style_id\&quot;,\&quot;type\&quot;:\&quot;string\&quot;},{\&quot;name\&quot;:\&quot;style_name\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;brand_id\&quot;,\&quot;type\&quot;:\&quot;int\&quot;},{\&quot;name\&quot;:\&quot;brand_num\&quot;,\&quot;type\&quot;:\&quot;int\&quot;},{\&quot;name\&quot;:\&quot;brand_name\&quot;,\&quot;type\&quot;:\&quot;string\&quot;},{\&quot;name\&quot;:\&quot;division_id\&quot;,\&quot;type\&quot;:\&quot;int\&quot;},{\&quot;name\&quot;:\&quot;division_num\&quot;,\&quot;type\&quot;:\&quot;int\&quot;},{\&quot;name\&quot;:\&quot;division_name\&quot;,\&quot;type\&quot;:\&quot;string\&quot;},{\&quot;name\&quot;:\&quot;department_id\&quot;,\&quot;type\&quot;:\&quot;int\&quot;},{\&quot;name\&quot;:\&quot;department_num\&quot;,\&quot;type\&quot;:\&quot;int\&quot;},{\&quot;name\&quot;:\&quot;department_name\&quot;,\&quot;type\&quot;:\&quot;string\&quot;},{\&quot;name\&quot;:\&quot;class_id\&quot;,\&quot;type\&quot;:\&quot;long\&quot;},{\&quot;name\&quot;:\&quot;class_num\&quot;,\&quot;type\&quot;:\&quot;int\&quot;},{\&quot;name\&quot;:\&quot;class_name\&quot;,\&quot;type\&quot;:\&quot;string\&quot;},{\&quot;name\&quot;:\&quot;subclass_id\&quot;,\&quot;type\&quot;:\&quot;long\&quot;},{\&quot;name\&quot;:\&quot;subclass_num\&quot;,\&quot;type\&quot;:\&quot;int\&quot;},{\&quot;name\&quot;:\&quot;subclass_name\&quot;,\&quot;type\&quot;:\&quot;string\&quot;},{\&quot;name\&quot;:\&quot;activity\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;activity_specific\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;anti_stink\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;back_detail\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;backrise\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;branded_fabric\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;built_in_bra\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;class_rollup\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;class_rollup_2\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;closet_slots\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;cold_weather\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;coverage\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;cup_construction\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;cup_intention\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;current_season_code\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;elevated_franchise_waterfall\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;fabric_family\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;fit\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;flex_season_code\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;flex_status\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;franchise\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;gender\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;growth_drivers\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;hemline\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;inseam\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;inseam_bucket\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;inseam_uom\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;insulation_type\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;key_item\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;leg_opening\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;length\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;liner_shorts\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;master_style_id\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;master_style_name\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;merch_fabric_family\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;ms_core_seasonal\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;multi_single\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;mvt_artwork\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;neckline\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;one_mindful_attribute\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;otm_sweat\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;otw_bucket\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;otw_function\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;own_activities\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;parent_style_id\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;personal_care_brand\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;pod\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;price_band\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;price_bracket\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;price_bucket\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;product_development_pod\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;product_line\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;product_type\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;product_type_category\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;recycled_content\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;rise\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;seasonality\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;secondary_silhouette\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;segments\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;shelf\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;self_fabric\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;silhouette\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;size_personal_care\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;sizing\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;sleeve_length\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;sleeve_length_description\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;special_program\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;style_bucket\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;support\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;swim_activity\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;taxonomy\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;waistband\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;weight\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;why_we_made_this\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null}]}&quot;;
+
+Schema.Parser parser = new Schema.Parser();
+Schema schema = parser.parse(styleSchema);
+
+GenericRecord avroRecord = new GenericData.Record(schema);
+
+avroRecord.put(&quot;style_id&quot;,&quot;PERFTEST_${__Random(1,99999,rnd)}&quot;)
+if(vars.get(&quot;stylename&quot;)!=&quot;&quot;){	avroRecord.put(&quot;style_name&quot;,&quot;${stylename}&quot;)	}
+if(vars.get(&quot;brandid&quot;)!=&quot;&quot;){	avroRecord.put(&quot;brand_id&quot;,${brandid})	}
+if(vars.get(&quot;brandnum&quot;)!=&quot;&quot;){	avroRecord.put(&quot;brand_num&quot;,${brandnum})	}
+if(vars.get(&quot;brandname&quot;)!=&quot;&quot;){	avroRecord.put(&quot;brand_name&quot;,&quot;${brandname}&quot;)	}
+if(vars.get(&quot;divisionid&quot;)!=&quot;&quot;){	avroRecord.put(&quot;division_id&quot;,${divisionid})	}
+if(vars.get(&quot;divisionnum&quot;)!=&quot;&quot;){	avroRecord.put(&quot;division_num&quot;,${divisionnum})	}
+if(vars.get(&quot;divisionname&quot;)!=&quot;&quot;){	avroRecord.put(&quot;division_name&quot;,&quot;${divisionname}&quot;)	}
+if(vars.get(&quot;departmentid&quot;)!=&quot;&quot;){	avroRecord.put(&quot;department_id&quot;,${departmentid})	}
+if(vars.get(&quot;departmentnum&quot;)!=&quot;&quot;){	avroRecord.put(&quot;department_num&quot;,${departmentnum})	}
+if(vars.get(&quot;departmentname&quot;)!=&quot;&quot;){	avroRecord.put(&quot;department_name&quot;,&quot;${departmentname}&quot;)	}
+if(vars.get(&quot;classid&quot;)!=&quot;&quot;){	avroRecord.put(&quot;class_id&quot;,${classid})	}
+if(vars.get(&quot;classname&quot;)!=&quot;&quot;){	avroRecord.put(&quot;class_name&quot;,&quot;${classname}&quot;)	}
+if(vars.get(&quot;classnum&quot;)!=&quot;&quot;){	avroRecord.put(&quot;class_num&quot;,${classnum})	}
+if(vars.get(&quot;subclassid&quot;)!=&quot;&quot;){	avroRecord.put(&quot;subclass_id&quot;,${subclassid})	}
+if(vars.get(&quot;subclassnum&quot;)!=&quot;&quot;){	avroRecord.put(&quot;subclass_num&quot;,${subclassnum})	}
+if(vars.get(&quot;subclassname&quot;)!=&quot;&quot;){	avroRecord.put(&quot;subclass_name&quot;,&quot;${subclassname}&quot;)	}
+//if(vars.get(&quot;activitylevel1&quot;)!=&quot;&quot;){	avroRecord.put(&quot;activity_level_1&quot;,&quot;${activitylevel1}&quot;)	}
+//if(vars.get(&quot;activitylevel2&quot;)!=&quot;&quot;){	avroRecord.put(&quot;activity_level_2&quot;,&quot;${activitylevel2}&quot;)	}
+//if(vars.get(&quot;activitylevel3&quot;)!=&quot;&quot;){	avroRecord.put(&quot;activity_level_3&quot;,&quot;${activitylevel3}&quot;)	}
+if(vars.get(&quot;activityspecific&quot;)!=&quot;&quot;){	avroRecord.put(&quot;activity_specific&quot;,&quot;${activityspecific}&quot;)	}
+if(vars.get(&quot;antistink&quot;)!=&quot;&quot;){	avroRecord.put(&quot;anti_stink&quot;,&quot;${antistink}&quot;)	}
+if(vars.get(&quot;backdetail&quot;)!=&quot;&quot;){	avroRecord.put(&quot;back_detail&quot;,&quot;${backdetail}&quot;)	}
+if(vars.get(&quot;backrise&quot;)!=&quot;&quot;){	avroRecord.put(&quot;backrise&quot;,&quot;${backrise}&quot;)	}
+if(vars.get(&quot;brandedfabric&quot;)!=&quot;&quot;){	avroRecord.put(&quot;branded_fabric&quot;,&quot;${brandedfabric}&quot;)	}
+if(vars.get(&quot;builtinbra&quot;)!=&quot;&quot;){	avroRecord.put(&quot;built_in_bra&quot;,&quot;${builtinbra}&quot;)	}
+if(vars.get(&quot;classrollup&quot;)!=&quot;&quot;){	avroRecord.put(&quot;class_rollup&quot;,&quot;${classrollup}&quot;)	}
+if(vars.get(&quot;classrollup2&quot;)!=&quot;&quot;){	avroRecord.put(&quot;class_rollup_2&quot;,&quot;${classrollup2}&quot;)	}
+if(vars.get(&quot;closetslots&quot;)!=&quot;&quot;){	avroRecord.put(&quot;closet_slots&quot;,&quot;${closetslots}&quot;)	}
+//if(vars.get(&quot;closure&quot;)!=&quot;&quot;){	avroRecord.put(&quot;closure&quot;,&quot;${closure}&quot;)	}
+if(vars.get(&quot;coldweather&quot;)!=&quot;&quot;){	avroRecord.put(&quot;cold_weather&quot;,&quot;${coldweather}&quot;)	}
+if(vars.get(&quot;coverage&quot;)!=&quot;&quot;){	avroRecord.put(&quot;coverage&quot;,&quot;${coverage}&quot;)	}
+if(vars.get(&quot;cupconstruction&quot;)!=&quot;&quot;){	avroRecord.put(&quot;cup_construction&quot;,&quot;${cupconstruction}&quot;)	}
+if(vars.get(&quot;cupintention&quot;)!=&quot;&quot;){	avroRecord.put(&quot;cup_intention&quot;,&quot;${cupintention}&quot;)	}
+if(vars.get(&quot;currentseasoncode&quot;)!=&quot;&quot;){	avroRecord.put(&quot;current_season_code&quot;,&quot;${currentseasoncode}&quot;)	}
+if(vars.get(&quot;elevatedfranchisewaterfall&quot;)!=&quot;&quot;){	avroRecord.put(&quot;elevated_franchise_waterfall&quot;,&quot;${elevatedfranchisewaterfall}&quot;)	}
+if(vars.get(&quot;fabricfamily&quot;)!=&quot;&quot;){	avroRecord.put(&quot;fabric_family&quot;,&quot;${fabricfamily}&quot;)	}
+if(vars.get(&quot;fit&quot;)!=&quot;&quot;){	avroRecord.put(&quot;fit&quot;,&quot;${fit}&quot;)	}
+if(vars.get(&quot;flexseasoncode&quot;)!=&quot;&quot;){	avroRecord.put(&quot;flex_season_code&quot;,&quot;${flexseasoncode}&quot;)	}
+if(vars.get(&quot;flexstatus&quot;)!=&quot;&quot;){	avroRecord.put(&quot;flex_status&quot;,&quot;${flexstatus}&quot;)	}
+//if(vars.get(&quot;flexstylename&quot;)!=&quot;&quot;){	avroRecord.put(&quot;flex_style_name&quot;,&quot;${flexstylename}&quot;)	}
+if(vars.get(&quot;franchise&quot;)!=&quot;&quot;){	avroRecord.put(&quot;franchise&quot;,&quot;${franchise}&quot;)	}
+//if(vars.get(&quot;function&quot;)!=&quot;&quot;){	avroRecord.put(&quot;function&quot;,&quot;${function}&quot;)	}
+if(vars.get(&quot;gender&quot;)!=&quot;&quot;){	avroRecord.put(&quot;gender&quot;,&quot;${gender}&quot;)	}
+if(vars.get(&quot;growthdrivers&quot;)!=&quot;&quot;){	avroRecord.put(&quot;growth_drivers&quot;,&quot;${growthdrivers}&quot;)	}
+//if(vars.get(&quot;height&quot;)!=&quot;&quot;){	avroRecord.put(&quot;height&quot;,&quot;${height}&quot;)	}
+if(vars.get(&quot;hemline&quot;)!=&quot;&quot;){	avroRecord.put(&quot;hemline&quot;,&quot;${hemline}&quot;)	}
+if(vars.get(&quot;inseam&quot;)!=&quot;&quot;){	avroRecord.put(&quot;inseam&quot;,&quot;${inseam}&quot;)	}
+if(vars.get(&quot;inseambucket&quot;)!=&quot;&quot;){	avroRecord.put(&quot;inseam_bucket&quot;,&quot;${inseambucket}&quot;)	}
+if(vars.get(&quot;inseamuom&quot;)!=&quot;&quot;){	avroRecord.put(&quot;inseam_uom&quot;,&quot;${inseamuom}&quot;)	}
+if(vars.get(&quot;insulationtype&quot;)!=&quot;&quot;){	avroRecord.put(&quot;insulation_type&quot;,&quot;${insulationtype}&quot;)	}
+if(vars.get(&quot;keyitem&quot;)!=&quot;&quot;){	avroRecord.put(&quot;key_item&quot;,&quot;${keyitem}&quot;)	}
+if(vars.get(&quot;legopening&quot;)!=&quot;&quot;){	avroRecord.put(&quot;leg_opening&quot;,&quot;${legopening}&quot;)	}
+if(vars.get(&quot;length&quot;)!=&quot;&quot;){	avroRecord.put(&quot;length&quot;,&quot;${length}&quot;)	}
+//if(vars.get(&quot;lengthtechnical&quot;)!=&quot;&quot;){	avroRecord.put(&quot;length_technical&quot;,&quot;${lengthtechnical}&quot;)	}
+if(vars.get(&quot;linershorts&quot;)!=&quot;&quot;){	avroRecord.put(&quot;liner_shorts&quot;,&quot;${linershorts}&quot;)	}
+if(vars.get(&quot;mscoreseasonal&quot;)!=&quot;&quot;){	avroRecord.put(&quot;ms_core_seasonal&quot;,&quot;${mscoreseasonal}&quot;)	}
+if(vars.get(&quot;mvtartwork&quot;)!=&quot;&quot;){	avroRecord.put(&quot;mvt_artwork&quot;,&quot;${mvtartwork}&quot;)	}
+if(vars.get(&quot;masterstyleid&quot;)!=&quot;&quot;){	avroRecord.put(&quot;master_style_id&quot;,&quot;${masterstyleid}&quot;)	}
+if(vars.get(&quot;masterstylename&quot;)!=&quot;&quot;){	avroRecord.put(&quot;master_style_name&quot;,&quot;${masterstylename}&quot;)	}
+if(vars.get(&quot;merchfabricfamily&quot;)!=&quot;&quot;){	avroRecord.put(&quot;merch_fabric_family&quot;,&quot;${merchfabricfamily}&quot;)	}
+//if(vars.get(&quot;midsolematerial&quot;)!=&quot;&quot;){	avroRecord.put(&quot;midsole_material&quot;,&quot;${midsolematerial}&quot;)	}
+if(vars.get(&quot;multisingle&quot;)!=&quot;&quot;){	avroRecord.put(&quot;multi_single&quot;,&quot;${multisingle}&quot;)	}
+if(vars.get(&quot;neckline&quot;)!=&quot;&quot;){	avroRecord.put(&quot;neckline&quot;,&quot;${neckline}&quot;)	}
+if(vars.get(&quot;otmsweat&quot;)!=&quot;&quot;){	avroRecord.put(&quot;otm_sweat&quot;,&quot;${otmsweat}&quot;)	}
+if(vars.get(&quot;otwbucket&quot;)!=&quot;&quot;){	avroRecord.put(&quot;otw_bucket&quot;,&quot;${otwbucket}&quot;)	}
+if(vars.get(&quot;otwfunction&quot;)!=&quot;&quot;){	avroRecord.put(&quot;otw_function&quot;,&quot;${otwfunction}&quot;)	}
+if(vars.get(&quot;onemindfulattribute&quot;)!=&quot;&quot;){	avroRecord.put(&quot;one_mindful_attribute&quot;,&quot;${onemindfulattribute}&quot;)	}
+//if(vars.get(&quot;opening&quot;)!=&quot;&quot;){	avroRecord.put(&quot;opening&quot;,&quot;${opening}&quot;)	}
+if(vars.get(&quot;ownactivities&quot;)!=&quot;&quot;){	avroRecord.put(&quot;own_activities&quot;,&quot;${ownactivities}&quot;)	}
+if(vars.get(&quot;parentstyleid&quot;)!=&quot;&quot;){	avroRecord.put(&quot;parent_style_id&quot;,&quot;${parentstyleid}&quot;)	}
+if(vars.get(&quot;personalcarebrand&quot;)!=&quot;&quot;){	avroRecord.put(&quot;personal_care_brand&quot;,&quot;${personalcarebrand}&quot;)	}
+if(vars.get(&quot;pod&quot;)!=&quot;&quot;){	avroRecord.put(&quot;pod&quot;,&quot;${pod}&quot;)	}
+if(vars.get(&quot;priceband&quot;)!=&quot;&quot;){	avroRecord.put(&quot;price_band&quot;,&quot;${priceband}&quot;)	}
+if(vars.get(&quot;pricebracket&quot;)!=&quot;&quot;){	avroRecord.put(&quot;price_bracket&quot;,&quot;${pricebracket}&quot;)	}
+if(vars.get(&quot;pricebucket&quot;)!=&quot;&quot;){	avroRecord.put(&quot;price_bucket&quot;,&quot;${pricebucket}&quot;)	}
+if(vars.get(&quot;productdevelopmentpod&quot;)!=&quot;&quot;){	avroRecord.put(&quot;product_development_pod&quot;,&quot;${productdevelopmentpod}&quot;)	}
+if(vars.get(&quot;productline&quot;)!=&quot;&quot;){	avroRecord.put(&quot;product_line&quot;,&quot;${productline}&quot;)	}
+//if(vars.get(&quot;productsizedefinition&quot;)!=&quot;&quot;){	avroRecord.put(&quot;product_size_definition&quot;,&quot;${productsizedefinition}&quot;)	}
+if(vars.get(&quot;producttype&quot;)!=&quot;&quot;){	avroRecord.put(&quot;product_type&quot;,&quot;${producttype}&quot;)	}
+if(vars.get(&quot;producttypecategory&quot;)!=&quot;&quot;){	avroRecord.put(&quot;product_type_category&quot;,&quot;${producttypecategory}&quot;)	}
+if(vars.get(&quot;recycledcontent&quot;)!=&quot;&quot;){	avroRecord.put(&quot;recycled_content&quot;,&quot;${recycledcontent}&quot;)	}
+if(vars.get(&quot;rise&quot;)!=&quot;&quot;){	avroRecord.put(&quot;rise&quot;,&quot;${rise}&quot;)	}
+if(vars.get(&quot;seasonality&quot;)!=&quot;&quot;){	avroRecord.put(&quot;seasonality&quot;,&quot;${seasonality}&quot;)	}
+if(vars.get(&quot;secondarysilhouette&quot;)!=&quot;&quot;){	avroRecord.put(&quot;secondary_silhouette&quot;,&quot;${secondarysilhouette}&quot;)	}
+if(vars.get(&quot;segments&quot;)!=&quot;&quot;){	avroRecord.put(&quot;segments&quot;,&quot;${segments}&quot;)	}
+if(vars.get(&quot;selffabric&quot;)!=&quot;&quot;){	avroRecord.put(&quot;self_fabric&quot;,&quot;${selffabric}&quot;)	}
+if(vars.get(&quot;shelf&quot;)!=&quot;&quot;){	avroRecord.put(&quot;shelf&quot;,&quot;${shelf}&quot;)	}
+if(vars.get(&quot;silhouette&quot;)!=&quot;&quot;){	avroRecord.put(&quot;silhouette&quot;,&quot;${silhouette}&quot;)	}
+if(vars.get(&quot;sizepersonalcare&quot;)!=&quot;&quot;){	avroRecord.put(&quot;size_personal_care&quot;,&quot;${sizepersonalcare}&quot;)	}
+//if(vars.get(&quot;sizerange&quot;)!=&quot;&quot;){	avroRecord.put(&quot;size_range&quot;,&quot;${sizerange}&quot;)	}
+//if(vars.get(&quot;sizescale&quot;)!=&quot;&quot;){	avroRecord.put(&quot;size_scale&quot;,&quot;${sizescale}&quot;)	}
+if(vars.get(&quot;sizing&quot;)!=&quot;&quot;){	avroRecord.put(&quot;sizing&quot;,&quot;${sizing}&quot;)	}
+if(vars.get(&quot;sleevelength&quot;)!=&quot;&quot;){	avroRecord.put(&quot;sleeve_length&quot;,&quot;${sleevelength}&quot;)	}
+//if(vars.get(&quot;sleevelengthtechnical&quot;)!=&quot;&quot;){	avroRecord.put(&quot;sleeve_length_technical&quot;,&quot;${sleevelengthtechnical}&quot;)	}
+if(vars.get(&quot;specialprogram&quot;)!=&quot;&quot;){	avroRecord.put(&quot;special_program&quot;,&quot;${specialprogram}&quot;)	}
+if(vars.get(&quot;stylebucket&quot;)!=&quot;&quot;){	avroRecord.put(&quot;style_bucket&quot;,&quot;${stylebucket}&quot;)	}
+if(vars.get(&quot;support&quot;)!=&quot;&quot;){	avroRecord.put(&quot;support&quot;,&quot;${support}&quot;)	}
+if(vars.get(&quot;swimactivity&quot;)!=&quot;&quot;){	avroRecord.put(&quot;swim_activity&quot;,&quot;${swimactivity}&quot;)	}
+if(vars.get(&quot;taxonomy&quot;)!=&quot;&quot;){	avroRecord.put(&quot;taxonomy&quot;,&quot;${taxonomy}&quot;)	}
+if(vars.get(&quot;waistband&quot;)!=&quot;&quot;){	avroRecord.put(&quot;waistband&quot;,&quot;${waistband}&quot;)	}
+if(vars.get(&quot;weight&quot;)!=&quot;&quot;){	avroRecord.put(&quot;weight&quot;,&quot;${weight}&quot;)	}
+if(vars.get(&quot;whywemadethis&quot;)!=&quot;&quot;){	avroRecord.put(&quot;why_we_made_this&quot;,&quot;${whywemadethis}&quot;)	}
+
+//log.info(&quot;object created&quot;);
+
+String messageKey = &quot;PERFTEST_${rnd}&quot;;
+
+//log.info(&quot;Before Send&quot;);
+log.info(&quot;${messageKey}&quot;);
+
+ProducerRecord&lt;Object, Object&gt; record = new ProducerRecord&lt;&gt;(&quot;${kafka_topic_producer}&quot;, messageKey, avroRecord);
+
+producer.send(record);
+
+
+
+
+
+</stringProp>
+          <stringProp name="scriptLanguage">groovy</stringProp>
+        </JSR223Sampler>
+        <hashTree/>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Test Send Record - JSR223 Sampler" enabled="false">
+          <stringProp name="cacheKey">false</stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="script">import org.apache.avro.Schema;
+import org.apache.avro.generic.GenericData;
+import org.apache.avro.generic.GenericRecord;
+
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import java.util.Properties;
+import org.apache.kafka.common.serialization.StringSerializer;
+import io.confluent.kafka.serializers.KafkaAvroSerializer;
+
+
+KafkaProducer producer = props.get(&quot;producer&quot;);
+
+String styleSchema = &quot;{\&quot;type\&quot;:\&quot;record\&quot;,\&quot;name\&quot;:\&quot;style\&quot;,\&quot;namespace\&quot;:\&quot;com.lululemon.plim.data.export.kafka.avro\&quot;,\&quot;fields\&quot;:[{\&quot;name\&quot;:\&quot;style_id\&quot;,\&quot;type\&quot;:\&quot;string\&quot;},{\&quot;name\&quot;:\&quot;style_name\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;brand_id\&quot;,\&quot;type\&quot;:\&quot;int\&quot;},{\&quot;name\&quot;:\&quot;brand_num\&quot;,\&quot;type\&quot;:\&quot;int\&quot;},{\&quot;name\&quot;:\&quot;brand_name\&quot;,\&quot;type\&quot;:\&quot;string\&quot;},{\&quot;name\&quot;:\&quot;division_id\&quot;,\&quot;type\&quot;:\&quot;int\&quot;},{\&quot;name\&quot;:\&quot;division_num\&quot;,\&quot;type\&quot;:\&quot;int\&quot;},{\&quot;name\&quot;:\&quot;division_name\&quot;,\&quot;type\&quot;:\&quot;string\&quot;},{\&quot;name\&quot;:\&quot;department_id\&quot;,\&quot;type\&quot;:\&quot;int\&quot;},{\&quot;name\&quot;:\&quot;department_num\&quot;,\&quot;type\&quot;:\&quot;int\&quot;},{\&quot;name\&quot;:\&quot;department_name\&quot;,\&quot;type\&quot;:\&quot;string\&quot;},{\&quot;name\&quot;:\&quot;class_id\&quot;,\&quot;type\&quot;:\&quot;long\&quot;},{\&quot;name\&quot;:\&quot;class_num\&quot;,\&quot;type\&quot;:\&quot;int\&quot;},{\&quot;name\&quot;:\&quot;class_name\&quot;,\&quot;type\&quot;:\&quot;string\&quot;},{\&quot;name\&quot;:\&quot;subclass_id\&quot;,\&quot;type\&quot;:\&quot;long\&quot;},{\&quot;name\&quot;:\&quot;subclass_num\&quot;,\&quot;type\&quot;:\&quot;int\&quot;},{\&quot;name\&quot;:\&quot;subclass_name\&quot;,\&quot;type\&quot;:\&quot;string\&quot;},{\&quot;name\&quot;:\&quot;activity\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;activity_specific\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;anti_stink\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;back_detail\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;backrise\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;branded_fabric\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;built_in_bra\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;class_rollup\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;class_rollup_2\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;closet_slots\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;cold_weather\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;coverage\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;cup_construction\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;cup_intention\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;current_season_code\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;elevated_franchise_waterfall\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;fabric_family\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;fit\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;flex_season_code\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;flex_status\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;franchise\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;gender\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;growth_drivers\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;hemline\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;inseam\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;inseam_bucket\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;inseam_uom\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;insulation_type\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;key_item\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;leg_opening\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;length\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;liner_shorts\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;master_style_id\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;master_style_name\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;merch_fabric_family\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;ms_core_seasonal\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;multi_single\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;mvt_artwork\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;neckline\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;one_mindful_attribute\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;otm_sweat\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;otw_bucket\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;otw_function\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;own_activities\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;parent_style_id\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;personal_care_brand\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;pod\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;price_band\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;price_bracket\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;price_bucket\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;product_development_pod\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;product_line\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;product_type\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;product_type_category\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;recycled_content\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;rise\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;seasonality\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;secondary_silhouette\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;segments\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;shelf\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;self_fabric\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;silhouette\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;size_personal_care\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;sizing\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;sleeve_length\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;sleeve_length_description\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;special_program\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;style_bucket\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;support\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;swim_activity\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;taxonomy\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;waistband\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;weight\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null},{\&quot;name\&quot;:\&quot;why_we_made_this\&quot;,\&quot;type\&quot;:[\&quot;null\&quot;,\&quot;string\&quot;],\&quot;default\&quot;:null}]}&quot;;
+
+Schema.Parser parser = new Schema.Parser();
+Schema schema = parser.parse(styleSchema);
+
+GenericRecord avroRecord = new GenericData.Record(schema);
+
+//avroRecord.put(&quot;data_last_updated_ts&quot;,&quot;${__time(yyyy-MM-dd HH:mm:ss.SSSSSS,)}&quot;)
+//avroRecord.put(&quot;data_created_ts&quot;,&quot;${__time(yyyy-MM-dd HH:mm:ss.SSSSSS,)}&quot;)
+
+avroRecord.put(&quot;style_id&quot;,&quot;PERFTEST0001&quot;)
+avroRecord.put(&quot;style_name&quot;,&quot;Great&quot;)
+avroRecord.put(&quot;brand_id&quot;,100)
+avroRecord.put(&quot;brand_num&quot;,100)
+avroRecord.put(&quot;brand_name&quot;,&quot;lululemon&quot;)
+avroRecord.put(&quot;division_id&quot;,100120)
+avroRecord.put(&quot;division_num&quot;,120)
+avroRecord.put(&quot;division_name&quot;,&quot;lulu&quot;)
+avroRecord.put(&quot;department_id&quot;,100120305)
+avroRecord.put(&quot;department_num&quot;,305)
+avroRecord.put(&quot;department_name&quot;,&quot;Mens&quot;)
+avroRecord.put(&quot;class_id&quot;,100120305514)
+avroRecord.put(&quot;class_name&quot;,&quot;Mens&quot;)
+avroRecord.put(&quot;class_num&quot;,514)	
+avroRecord.put(&quot;subclass_id&quot;,100120305514730)	
+avroRecord.put(&quot;subclass_num&quot;,730)	
+avroRecord.put(&quot;subclass_name&quot;,&quot;Mens&quot;)	
+//avroRecord.put(&quot;activity_level_1&quot;,&quot;${activitylevel1}&quot;)	
+//avroRecord.put(&quot;activity_level_2&quot;,&quot;${activitylevel2}&quot;)	
+//avroRecord.put(&quot;activity_level_3&quot;,&quot;${activitylevel3}&quot;)	
+avroRecord.put(&quot;activity_specific&quot;,&quot;Essential&quot;)	
+avroRecord.put(&quot;anti_stink&quot;,&quot;No&quot;)	
+avroRecord.put(&quot;back_detail&quot;,&quot;&quot;)	
+avroRecord.put(&quot;backrise&quot;,&quot;&quot;)	
+avroRecord.put(&quot;branded_fabric&quot;,&quot;Other&quot;)	
+avroRecord.put(&quot;built_in_bra&quot;,&quot;&quot;)	
+avroRecord.put(&quot;class_rollup&quot;,&quot;Performance&quot;)	
+avroRecord.put(&quot;class_rollup_2&quot;,&quot;&quot;)	
+avroRecord.put(&quot;closet_slots&quot;,&quot;Active&quot;)	
+//avroRecord.put(&quot;closure&quot;,&quot;&quot;)	
+avroRecord.put(&quot;cold_weather&quot;,&quot;&quot;)	
+avroRecord.put(&quot;coverage&quot;,&quot;&quot;)	
+avroRecord.put(&quot;cup_construction&quot;,&quot;&quot;)	
+avroRecord.put(&quot;cup_intention&quot;,&quot;&quot;)	
+avroRecord.put(&quot;current_season_code&quot;,&quot;COR&quot;)	
+avroRecord.put(&quot;elevated_franchise_waterfall&quot;,&quot;Bottoms&quot;)	
+avroRecord.put(&quot;fabric_family&quot;,&quot;Other&quot;)	
+avroRecord.put(&quot;fit&quot;,&quot;Classic&quot;)	
+avroRecord.put(&quot;flex_season_code&quot;,&quot;3FA&quot;)	
+avroRecord.put(&quot;flex_status&quot;,&quot;Active&quot;)	
+//avroRecord.put(&quot;flex_style_name&quot;,&quot;&quot;)	
+avroRecord.put(&quot;franchise&quot;,&quot;Other&quot;)	
+//avroRecord.put(&quot;function&quot;,&quot;&quot;)	
+avroRecord.put(&quot;gender&quot;,&quot;Mens&quot;)	
+avroRecord.put(&quot;growth_drivers&quot;,&quot;&quot;)	
+//avroRecord.put(&quot;height&quot;,&quot;&quot;)
+avroRecord.put(&quot;hemline&quot;,&quot;&quot;)	
+avroRecord.put(&quot;inseam&quot;,&quot;34&quot;)	
+avroRecord.put(&quot;inseam_bucket&quot;,&quot;34&quot;)	
+avroRecord.put(&quot;inseam_uom&quot;,&quot;Inches&quot;)	
+avroRecord.put(&quot;insulation_type&quot;,&quot;&quot;)	
+avroRecord.put(&quot;key_item&quot;,&quot;No&quot;)	
+avroRecord.put(&quot;leg_opening&quot;,&quot;Classic&quot;)	
+avroRecord.put(&quot;length&quot;,&quot;Mid&quot;)	
+//avroRecord.put(&quot;length_technical&quot;,&quot;&quot;)	
+avroRecord.put(&quot;liner_shorts&quot;,&quot;&quot;)	
+avroRecord.put(&quot;ms_core_seasonal&quot;,&quot;&quot;)	
+avroRecord.put(&quot;mvt_artwork&quot;,&quot;&quot;)	
+avroRecord.put(&quot;master_style_id&quot;,&quot;107665&quot;)	
+avroRecord.put(&quot;master_style_name&quot;,&quot;Wall&quot;)	
+avroRecord.put(&quot;merch_fabric_family&quot;,&quot;&quot;)	
+//avroRecord.put(&quot;midsole_material&quot;,&quot;&quot;)	
+avroRecord.put(&quot;multi_single&quot;,&quot;&quot;)	
+avroRecord.put(&quot;neckline&quot;,&quot;&quot;)	
+avroRecord.put(&quot;otm_sweat&quot;,&quot;&quot;)	
+avroRecord.put(&quot;otw_bucket&quot;,&quot;&quot;)	
+avroRecord.put(&quot;otw_function&quot;,&quot;&quot;)	
+avroRecord.put(&quot;one_mindful_attribute&quot;,&quot;No&quot;)	
+//avroRecord.put(&quot;opening&quot;,&quot;&quot;)	
+avroRecord.put(&quot;own_activities&quot;,&quot;Train&quot;)	
+avroRecord.put(&quot;parent_style_id&quot;,&quot;LM5602T&quot;)	
+avroRecord.put(&quot;personal_care_brand&quot;,&quot;&quot;)	
+avroRecord.put(&quot;pod&quot;,&quot;Bottoms&quot;)	
+avroRecord.put(&quot;price_band&quot;,&quot;&quot;)	
+avroRecord.put(&quot;price_bracket&quot;,&quot;Good&quot;)	
+avroRecord.put(&quot;price_bucket&quot;,&quot;&quot;)	
+avroRecord.put(&quot;product_development_pod&quot;,&quot;Sweat&quot;)	
+avroRecord.put(&quot;product_line&quot;,&quot;Sweat&quot;)	
+//avroRecord.put(&quot;product_size_definition&quot;,&quot;XXS&quot;)	
+avroRecord.put(&quot;product_type&quot;,&quot;&quot;)	
+avroRecord.put(&quot;product_type_category&quot;,&quot;&quot;)	
+avroRecord.put(&quot;recycled_content&quot;,&quot;No&quot;)	
+avroRecord.put(&quot;rise&quot;,&quot;&quot;)	
+avroRecord.put(&quot;seasonality&quot;,&quot;&quot;)	
+avroRecord.put(&quot;secondary_silhouette&quot;,&quot;&quot;)	
+avroRecord.put(&quot;segments&quot;,&quot;Performance&quot;)	
+avroRecord.put(&quot;self_fabric&quot;,&quot;Cordura&quot;)	
+avroRecord.put(&quot;shelf&quot;,&quot;&quot;)	
+avroRecord.put(&quot;silhouette&quot;,&quot;Pull&quot;)	
+avroRecord.put(&quot;size_personal_care&quot;,&quot;&quot;)	
+//avroRecord.put(&quot;size_range&quot;,&quot;L&quot;)	
+//avroRecord.put(&quot;size_scale&quot;,&quot;E&quot;)	
+avroRecord.put(&quot;sizing&quot;,&quot;&quot;)	
+avroRecord.put(&quot;sleeve_length&quot;,&quot;&quot;)	
+//avroRecord.put(&quot;sleeve_length_technical&quot;,&quot;&quot;)	
+avroRecord.put(&quot;special_program&quot;,&quot;&quot;)	
+avroRecord.put(&quot;style_bucket&quot;,&quot;&quot;)	
+avroRecord.put(&quot;support&quot;,&quot;&quot;)	
+avroRecord.put(&quot;swim_activity&quot;,&quot;&quot;)	
+avroRecord.put(&quot;taxonomy&quot;,&quot;100.120.305.514.730&quot;)	
+avroRecord.put(&quot;waistband&quot;,&quot;Flat&quot;)	
+avroRecord.put(&quot;weight&quot;,&quot;&quot;)	
+avroRecord.put(&quot;why_we_made_this&quot;,&quot;adventures&quot;)	
+
+log.info(&quot;object created&quot;);
+
+String messageKey = &quot;PERFTEST0001&quot;;
+
+log.info(&quot;Before Send&quot;);
+
+ProducerRecord&lt;Object, Object&gt; record = new ProducerRecord&lt;&gt;(&quot;${kafka_topic_producer}&quot;, messageKey, avroRecord);
+
+producer.send(record);
+
+
+
+
+
+</stringProp>
+          <stringProp name="scriptLanguage">groovy</stringProp>
+        </JSR223Sampler>
+        <hashTree/>
+        <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer" enabled="true">
+          <doubleProp>
+            <name>throughput</name>
+            <value>6.0</value>
+            <savedValue>0.0</savedValue>
+          </doubleProp>
+          <intProp name="calcMode">0</intProp>
+        </ConstantThroughputTimer>
+        <hashTree/>
+      </hashTree>
+      <PostThreadGroup guiclass="PostThreadGroupGui" testclass="PostThreadGroup" testname="tearDown Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </PostThreadGroup>
+      <hashTree>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Close Connection - JSR223 Sampler" enabled="true">
+          <stringProp name="cacheKey">false</stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="script">import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+
+KafkaProducer producer = props.get(&quot;producer&quot;);
+producer.close();
+log.info(&quot;Producer closed&quot;);</stringProp>
+          <stringProp name="scriptLanguage">groovy</stringProp>
+        </JSR223Sampler>
+        <hashTree/>
+      </hashTree>
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>true</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>true</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <ResultCollector guiclass="StatGraphVisualizer" testclass="ResultCollector" testname="Aggregate Graph" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
+      <hashTree/>
+      <BackendListener guiclass="BackendListenerGui" testclass="BackendListener" testname="Backend Listener" enabled="true">
+        <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="testName" elementType="Argument">
+              <stringProp name="Argument.name">testName</stringProp>
+              <stringProp name="Argument.value">Test</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="nodeName" elementType="Argument">
+              <stringProp name="Argument.name">nodeName</stringProp>
+              <stringProp name="Argument.value">Test-Node</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="influxDBHost" elementType="Argument">
+              <stringProp name="Argument.name">influxDBHost</stringProp>
+              <stringProp name="Argument.value">localhost</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="influxDBPort" elementType="Argument">
+              <stringProp name="Argument.name">influxDBPort</stringProp>
+              <stringProp name="Argument.value">8086</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="influxDBUser" elementType="Argument">
+              <stringProp name="Argument.name">influxDBUser</stringProp>
+              <stringProp name="Argument.value">shakti</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="influxDBPassword" elementType="Argument">
+              <stringProp name="Argument.name">influxDBPassword</stringProp>
+              <stringProp name="Argument.value">shakti@123</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="influxDBDatabase" elementType="Argument">
+              <stringProp name="Argument.name">influxDBDatabase</stringProp>
+              <stringProp name="Argument.value">kafka</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="retentionPolicy" elementType="Argument">
+              <stringProp name="Argument.name">retentionPolicy</stringProp>
+              <stringProp name="Argument.value">autogen</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="samplersList" elementType="Argument">
+              <stringProp name="Argument.name">samplersList</stringProp>
+              <stringProp name="Argument.value">.*</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="useRegexForSamplerList" elementType="Argument">
+              <stringProp name="Argument.name">useRegexForSamplerList</stringProp>
+              <stringProp name="Argument.value">true</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+          </collectionProp>
+        </elementProp>
+        <stringProp name="classname">rocks.nt.apm.jmeter.JMeterInfluxDBBackendListenerClient</stringProp>
+      </BackendListener>
+      <hashTree/>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>
