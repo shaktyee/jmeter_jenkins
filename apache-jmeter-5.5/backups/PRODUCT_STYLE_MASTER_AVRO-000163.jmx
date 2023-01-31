@@ -89,7 +89,7 @@ props.put(&quot;producer&quot;, producer);
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
-        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="DataSet" enabled="true">
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="DataSet" enabled="false">
           <stringProp name="filename">/Users/ssamal/Downloads/apache-jmeter-5.5/Data/KafkaProducer_PRODUCT_STYLE_MASTER.csv</stringProp>
           <stringProp name="fileEncoding"></stringProp>
           <stringProp name="variableNames">stylename,brandid,brandnum,brandname,divisionid,divisionnum,divisionname,departmentid,departmentnum,departmentname,classid,classname,classnum,subclassid,subclassnum,subclassname,activityspecific,antistink,backdetail,backrise,brandedfabric,builtinbra,classrollup,classrollup2,closetslots,coldweather,coverage,cupconstruction,cupintention,currentseasoncode,elevatedfranchisewaterfall,fabricfamily,fit,flexseasoncode,flexstatus,franchise,gender,growthdrivers,hemline,inseam,inseambucket,inseamuom,insulationtype,keyitem,legopening,length,linershorts,mscoreseasonal,mvtartwork,masterstyleid,masterstylename,merchfabricfamily,multisingle,neckline,otmsweat,otwbucket,otwfunction,onemindfulattribute,ownactivities,parentstyleid,personalcarebrand,pod,priceband,pricebracket,pricebucket,productdevelopmentpod,productline,producttype,producttypecategory,recycledcontent,rise,seasonality,secondarysilhouette,segments,selffabric,shelf,silhouette,sizepersonalcare,sizing,sleevelength,specialprogram,stylebucket,support,swimactivity,taxonomy,waistband,weight,whywemadethis</stringProp>
@@ -101,7 +101,7 @@ props.put(&quot;producer&quot;, producer);
           <stringProp name="shareMode">shareMode.all</stringProp>
         </CSVDataSet>
         <hashTree/>
-        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Send Record - PRODUCT_STYLE_MASTER" enabled="true">
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Send Record param - PRODUCT_STYLE_MASTER" enabled="false">
           <stringProp name="cacheKey">false</stringProp>
           <stringProp name="filename"></stringProp>
           <stringProp name="parameters"></stringProp>
@@ -249,7 +249,7 @@ producer.send(record);
           <stringProp name="scriptLanguage">groovy</stringProp>
         </JSR223Sampler>
         <hashTree/>
-        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Test Send Record - JSR223 Sampler" enabled="false">
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Send Record - PRODUCT_STYLE_MASTER" enabled="true">
           <stringProp name="cacheKey">false</stringProp>
           <stringProp name="filename"></stringProp>
           <stringProp name="parameters"></stringProp>
@@ -277,7 +277,7 @@ GenericRecord avroRecord = new GenericData.Record(schema);
 //avroRecord.put(&quot;data_last_updated_ts&quot;,&quot;${__time(yyyy-MM-dd HH:mm:ss.SSSSSS,)}&quot;)
 //avroRecord.put(&quot;data_created_ts&quot;,&quot;${__time(yyyy-MM-dd HH:mm:ss.SSSSSS,)}&quot;)
 
-avroRecord.put(&quot;style_id&quot;,&quot;PERFTEST0001&quot;)
+avroRecord.put(&quot;style_id&quot;,&quot;PERFTEST_${__Random(1,99999,rnd)}&quot;)
 avroRecord.put(&quot;style_name&quot;,&quot;Great&quot;)
 avroRecord.put(&quot;brand_id&quot;,100)
 avroRecord.put(&quot;brand_num&quot;,100)
@@ -381,11 +381,13 @@ avroRecord.put(&quot;waistband&quot;,&quot;Flat&quot;)
 avroRecord.put(&quot;weight&quot;,&quot;&quot;)	
 avroRecord.put(&quot;why_we_made_this&quot;,&quot;adventures&quot;)	
 
-log.info(&quot;object created&quot;);
+//log.info(&quot;object created&quot;);
 
-String messageKey = &quot;PERFTEST0001&quot;;
+String messageKey = &quot;PERFTEST_${rnd}&quot;;
 
-log.info(&quot;Before Send&quot;);
+//log.info(&quot;Before Send&quot;);
+
+log.info(&quot;${messageKey}&quot;);
 
 ProducerRecord&lt;Object, Object&gt; record = new ProducerRecord&lt;&gt;(&quot;${kafka_topic_producer}&quot;, messageKey, avroRecord);
 
@@ -402,7 +404,7 @@ producer.send(record);
         <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer" enabled="true">
           <doubleProp>
             <name>throughput</name>
-            <value>6.0</value>
+            <value>15.0</value>
             <savedValue>0.0</savedValue>
           </doubleProp>
           <intProp name="calcMode">0</intProp>
@@ -547,7 +549,7 @@ log.info(&quot;Producer closed&quot;);</stringProp>
         <stringProp name="filename"></stringProp>
       </ResultCollector>
       <hashTree/>
-      <BackendListener guiclass="BackendListenerGui" testclass="BackendListener" testname="Backend Listener" enabled="true">
+      <BackendListener guiclass="BackendListenerGui" testclass="BackendListener" testname="Backend Listener" enabled="false">
         <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
           <collectionProp name="Arguments.arguments">
             <elementProp name="testName" elementType="Argument">
