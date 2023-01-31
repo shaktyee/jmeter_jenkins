@@ -8,7 +8,7 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
-      <stringProp name="TestPlan.user_define_classpath">/Users/ssamal/Downloads/JMeter/apache-jmeter-5.5/lib/ext/JMeter-InfluxDB-Writer-plugin-1.2.jar,/Users/ssamal/Downloads/JMeter/apache-jmeter-5.5/lib/ext/kloadgen-5.2.7.jar</stringProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
       <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
     </TestPlan>
     <hashTree>
