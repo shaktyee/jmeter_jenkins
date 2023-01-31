@@ -1,0 +1,5 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1675155662210,533,Initiate Connection - PRODUCT_STYLE_MASTER,200,OK,Setup - Thread Group 1-1,text,true,,0,0,1,1,null,0,0,0
+1675155662746,3781,Send Record - PRODUCT_STYLE_MASTER,200,OK,Iterator - Thread Group 2-1,text,true,,73,0,2,2,null,0,0,0
+1675155663251,3276,Send Record - PRODUCT_STYLE_MASTER,200,OK,Iterator - Thread Group 2-2,text,true,,73,0,2,2,null,0,0,0
+1675155666529,2221,Close Connection - PRODUCT_STYLE_MASTER,200,OK,tearDown Thread Group 1-1,text,true,,0,0,1,1,null,0,0,0

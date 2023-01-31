@@ -8,7 +8,7 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
-      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+      <stringProp name="TestPlan.user_define_classpath">/Users/ssamal/Downloads/JMeter/apache-jmeter-5.5/lib/ext/JMeter-InfluxDB-Writer-plugin-1.2.jar,/Users/ssamal/Downloads/JMeter/apache-jmeter-5.5/lib/ext/kloadgen-5.2.7.jar</stringProp>
       <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
     </TestPlan>
     <hashTree>
@@ -46,7 +46,7 @@
           </collectionProp>
         </Arguments>
         <hashTree/>
-        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Initiate Connection - JSR223 Sampler" enabled="true">
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Initiate Connection - PRODUCT_STYLE_MASTER" enabled="true">
           <stringProp name="cacheKey">false</stringProp>
           <stringProp name="filename"></stringProp>
           <stringProp name="parameters"></stringProp>
@@ -79,7 +79,7 @@ props.put(&quot;producer&quot;, producer);
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <intProp name="LoopController.loops">-1</intProp>
+          <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">2</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
@@ -89,7 +89,7 @@ props.put(&quot;producer&quot;, producer);
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
-        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="DataSet" enabled="true">
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="DataSet" enabled="false">
           <stringProp name="filename">/Users/ssamal/Downloads/apache-jmeter-5.5/Data/KafkaProducer_PRODUCT_STYLE_MASTER.csv</stringProp>
           <stringProp name="fileEncoding"></stringProp>
           <stringProp name="variableNames">stylename,brandid,brandnum,brandname,divisionid,divisionnum,divisionname,departmentid,departmentnum,departmentname,classid,classname,classnum,subclassid,subclassnum,subclassname,activityspecific,antistink,backdetail,backrise,brandedfabric,builtinbra,classrollup,classrollup2,closetslots,coldweather,coverage,cupconstruction,cupintention,currentseasoncode,elevatedfranchisewaterfall,fabricfamily,fit,flexseasoncode,flexstatus,franchise,gender,growthdrivers,hemline,inseam,inseambucket,inseamuom,insulationtype,keyitem,legopening,length,linershorts,mscoreseasonal,mvtartwork,masterstyleid,masterstylename,merchfabricfamily,multisingle,neckline,otmsweat,otwbucket,otwfunction,onemindfulattribute,ownactivities,parentstyleid,personalcarebrand,pod,priceband,pricebracket,pricebucket,productdevelopmentpod,productline,producttype,producttypecategory,recycledcontent,rise,seasonality,secondarysilhouette,segments,selffabric,shelf,silhouette,sizepersonalcare,sizing,sleevelength,specialprogram,stylebucket,support,swimactivity,taxonomy,waistband,weight,whywemadethis</stringProp>
@@ -101,7 +101,7 @@ props.put(&quot;producer&quot;, producer);
           <stringProp name="shareMode">shareMode.all</stringProp>
         </CSVDataSet>
         <hashTree/>
-        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Send Record - JSR223 Sampler" enabled="true">
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Send Record param - PRODUCT_STYLE_MASTER" enabled="false">
           <stringProp name="cacheKey">false</stringProp>
           <stringProp name="filename"></stringProp>
           <stringProp name="parameters"></stringProp>
@@ -249,7 +249,7 @@ producer.send(record);
           <stringProp name="scriptLanguage">groovy</stringProp>
         </JSR223Sampler>
         <hashTree/>
-        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Test Send Record - JSR223 Sampler" enabled="false">
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Send Record - PRODUCT_STYLE_MASTER" enabled="true">
           <stringProp name="cacheKey">false</stringProp>
           <stringProp name="filename"></stringProp>
           <stringProp name="parameters"></stringProp>
@@ -277,7 +277,7 @@ GenericRecord avroRecord = new GenericData.Record(schema);
 //avroRecord.put(&quot;data_last_updated_ts&quot;,&quot;${__time(yyyy-MM-dd HH:mm:ss.SSSSSS,)}&quot;)
 //avroRecord.put(&quot;data_created_ts&quot;,&quot;${__time(yyyy-MM-dd HH:mm:ss.SSSSSS,)}&quot;)
 
-avroRecord.put(&quot;style_id&quot;,&quot;PERFTEST0001&quot;)
+avroRecord.put(&quot;style_id&quot;,&quot;PERFTEST_${__Random(1,99999,rnd)}&quot;)
 avroRecord.put(&quot;style_name&quot;,&quot;Great&quot;)
 avroRecord.put(&quot;brand_id&quot;,100)
 avroRecord.put(&quot;brand_num&quot;,100)
@@ -381,11 +381,13 @@ avroRecord.put(&quot;waistband&quot;,&quot;Flat&quot;)
 avroRecord.put(&quot;weight&quot;,&quot;&quot;)	
 avroRecord.put(&quot;why_we_made_this&quot;,&quot;adventures&quot;)	
 
-log.info(&quot;object created&quot;);
+//log.info(&quot;object created&quot;);
 
-String messageKey = &quot;PERFTEST0001&quot;;
+String messageKey = &quot;PERFTEST_${rnd}&quot;;
 
-log.info(&quot;Before Send&quot;);
+//log.info(&quot;Before Send&quot;);
+
+log.info(&quot;${messageKey}&quot;);
 
 ProducerRecord&lt;Object, Object&gt; record = new ProducerRecord&lt;&gt;(&quot;${kafka_topic_producer}&quot;, messageKey, avroRecord);
 
@@ -402,106 +404,11 @@ producer.send(record);
         <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer" enabled="true">
           <doubleProp>
             <name>throughput</name>
-            <value>6.0</value>
+            <value>15.0</value>
             <savedValue>0.0</savedValue>
           </doubleProp>
           <intProp name="calcMode">0</intProp>
         </ConstantThroughputTimer>
-        <hashTree/>
-        <BackendListener guiclass="BackendListenerGui" testclass="BackendListener" testname="Backend Listener" enabled="true">
-          <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="testName" elementType="Argument">
-                <stringProp name="Argument.name">testName</stringProp>
-                <stringProp name="Argument.value">Test</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="nodeName" elementType="Argument">
-                <stringProp name="Argument.name">nodeName</stringProp>
-                <stringProp name="Argument.value">Test-Node</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="influxDBHost" elementType="Argument">
-                <stringProp name="Argument.name">influxDBHost</stringProp>
-                <stringProp name="Argument.value">localhost</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="influxDBPort" elementType="Argument">
-                <stringProp name="Argument.name">influxDBPort</stringProp>
-                <stringProp name="Argument.value">8086</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="influxDBUser" elementType="Argument">
-                <stringProp name="Argument.name">influxDBUser</stringProp>
-                <stringProp name="Argument.value">shakti</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="influxDBPassword" elementType="Argument">
-                <stringProp name="Argument.name">influxDBPassword</stringProp>
-                <stringProp name="Argument.value">shakti@123</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="influxDBDatabase" elementType="Argument">
-                <stringProp name="Argument.name">influxDBDatabase</stringProp>
-                <stringProp name="Argument.value">kafka</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="retentionPolicy" elementType="Argument">
-                <stringProp name="Argument.name">retentionPolicy</stringProp>
-                <stringProp name="Argument.value">autogen</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="samplersList" elementType="Argument">
-                <stringProp name="Argument.name">samplersList</stringProp>
-                <stringProp name="Argument.value">.*</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="useRegexForSamplerList" elementType="Argument">
-                <stringProp name="Argument.name">useRegexForSamplerList</stringProp>
-                <stringProp name="Argument.value">true</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-          <stringProp name="classname">rocks.nt.apm.jmeter.JMeterInfluxDBBackendListenerClient</stringProp>
-        </BackendListener>
-        <hashTree/>
-        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
-          <boolProp name="ResultCollector.error_logging">false</boolProp>
-          <objProp>
-            <name>saveConfig</name>
-            <value class="SampleSaveConfiguration">
-              <time>true</time>
-              <latency>true</latency>
-              <timestamp>true</timestamp>
-              <success>true</success>
-              <label>true</label>
-              <code>true</code>
-              <message>true</message>
-              <threadName>true</threadName>
-              <dataType>true</dataType>
-              <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
-              <responseData>false</responseData>
-              <samplerData>false</samplerData>
-              <xml>false</xml>
-              <fieldNames>true</fieldNames>
-              <responseHeaders>false</responseHeaders>
-              <requestHeaders>false</requestHeaders>
-              <responseDataOnError>false</responseDataOnError>
-              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
-              <assertionsResultsToSave>0</assertionsResultsToSave>
-              <bytes>true</bytes>
-              <sentBytes>true</sentBytes>
-              <url>true</url>
-              <threadCounts>true</threadCounts>
-              <idleTime>true</idleTime>
-              <connectTime>true</connectTime>
-            </value>
-          </objProp>
-          <stringProp name="filename"></stringProp>
-        </ResultCollector>
         <hashTree/>
       </hashTree>
       <PostThreadGroup guiclass="PostThreadGroupGui" testclass="PostThreadGroup" testname="tearDown Thread Group" enabled="true">
@@ -518,7 +425,7 @@ producer.send(record);
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </PostThreadGroup>
       <hashTree>
-        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Close Connection - JSR223 Sampler" enabled="true">
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Close Connection - PRODUCT_STYLE_MASTER" enabled="true">
           <stringProp name="cacheKey">false</stringProp>
           <stringProp name="filename"></stringProp>
           <stringProp name="parameters"></stringProp>
@@ -641,6 +548,64 @@ log.info(&quot;Producer closed&quot;);</stringProp>
         </objProp>
         <stringProp name="filename"></stringProp>
       </ResultCollector>
+      <hashTree/>
+      <BackendListener guiclass="BackendListenerGui" testclass="BackendListener" testname="Backend Listener" enabled="true">
+        <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
+          <collectionProp name="Arguments.arguments">
+            <elementProp name="testName" elementType="Argument">
+              <stringProp name="Argument.name">testName</stringProp>
+              <stringProp name="Argument.value">Test</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="nodeName" elementType="Argument">
+              <stringProp name="Argument.name">nodeName</stringProp>
+              <stringProp name="Argument.value">Test-Node</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="influxDBHost" elementType="Argument">
+              <stringProp name="Argument.name">influxDBHost</stringProp>
+              <stringProp name="Argument.value">localhost</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="influxDBPort" elementType="Argument">
+              <stringProp name="Argument.name">influxDBPort</stringProp>
+              <stringProp name="Argument.value">8086</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="influxDBUser" elementType="Argument">
+              <stringProp name="Argument.name">influxDBUser</stringProp>
+              <stringProp name="Argument.value">shakti</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="influxDBPassword" elementType="Argument">
+              <stringProp name="Argument.name">influxDBPassword</stringProp>
+              <stringProp name="Argument.value">shakti@123</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="influxDBDatabase" elementType="Argument">
+              <stringProp name="Argument.name">influxDBDatabase</stringProp>
+              <stringProp name="Argument.value">kafka</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="retentionPolicy" elementType="Argument">
+              <stringProp name="Argument.name">retentionPolicy</stringProp>
+              <stringProp name="Argument.value">autogen</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="samplersList" elementType="Argument">
+              <stringProp name="Argument.name">samplersList</stringProp>
+              <stringProp name="Argument.value">.*</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+            <elementProp name="useRegexForSamplerList" elementType="Argument">
+              <stringProp name="Argument.name">useRegexForSamplerList</stringProp>
+              <stringProp name="Argument.value">true</stringProp>
+              <stringProp name="Argument.metadata">=</stringProp>
+            </elementProp>
+          </collectionProp>
+        </elementProp>
+        <stringProp name="classname">rocks.nt.apm.jmeter.JMeterInfluxDBBackendListenerClient</stringProp>
+      </BackendListener>
       <hashTree/>
     </hashTree>
   </hashTree>
