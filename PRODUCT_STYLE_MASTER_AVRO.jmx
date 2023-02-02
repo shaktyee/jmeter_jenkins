@@ -84,24 +84,24 @@ props.put(&quot;producer&quot;, producer);
         <stringProp name="ThreadGroup.num_threads">${__P(users,1)}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(rampup,1)}</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">${__P(duration,1)}</stringProp>
+        <stringProp name="ThreadGroup.duration">${__P(duration,180)}</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
-        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="DataSet" enabled="false">
-          <stringProp name="filename">/Users/ssamal/Downloads/apache-jmeter-5.5/Data/KafkaProducer_PRODUCT_STYLE_MASTER.csv</stringProp>
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="DataSet" enabled="true">
+          <stringProp name="filename">KafkaProducer_PRODUCT_STYLE_MASTER.csv</stringProp>
           <stringProp name="fileEncoding"></stringProp>
           <stringProp name="variableNames">stylename,brandid,brandnum,brandname,divisionid,divisionnum,divisionname,departmentid,departmentnum,departmentname,classid,classname,classnum,subclassid,subclassnum,subclassname,activityspecific,antistink,backdetail,backrise,brandedfabric,builtinbra,classrollup,classrollup2,closetslots,coldweather,coverage,cupconstruction,cupintention,currentseasoncode,elevatedfranchisewaterfall,fabricfamily,fit,flexseasoncode,flexstatus,franchise,gender,growthdrivers,hemline,inseam,inseambucket,inseamuom,insulationtype,keyitem,legopening,length,linershorts,mscoreseasonal,mvtartwork,masterstyleid,masterstylename,merchfabricfamily,multisingle,neckline,otmsweat,otwbucket,otwfunction,onemindfulattribute,ownactivities,parentstyleid,personalcarebrand,pod,priceband,pricebracket,pricebucket,productdevelopmentpod,productline,producttype,producttypecategory,recycledcontent,rise,seasonality,secondarysilhouette,segments,selffabric,shelf,silhouette,sizepersonalcare,sizing,sleevelength,specialprogram,stylebucket,support,swimactivity,taxonomy,waistband,weight,whywemadethis</stringProp>
           <boolProp name="ignoreFirstLine">true</boolProp>
           <stringProp name="delimiter">,</stringProp>
-          <boolProp name="quotedData">false</boolProp>
+          <boolProp name="quotedData">true</boolProp>
           <boolProp name="recycle">true</boolProp>
           <boolProp name="stopThread">false</boolProp>
           <stringProp name="shareMode">shareMode.all</stringProp>
         </CSVDataSet>
         <hashTree/>
-        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Send Record param - PRODUCT_STYLE_MASTER" enabled="false">
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Send Record - PRODUCT_STYLE_MASTER" enabled="true">
           <stringProp name="cacheKey">false</stringProp>
           <stringProp name="filename"></stringProp>
           <stringProp name="parameters"></stringProp>
@@ -249,7 +249,7 @@ producer.send(record);
           <stringProp name="scriptLanguage">groovy</stringProp>
         </JSR223Sampler>
         <hashTree/>
-        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Send Record - PRODUCT_STYLE_MASTER" enabled="true">
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Send Record hrd - PRODUCT_STYLE_MASTER" enabled="false">
           <stringProp name="cacheKey">false</stringProp>
           <stringProp name="filename"></stringProp>
           <stringProp name="parameters"></stringProp>
@@ -475,44 +475,7 @@ log.info(&quot;Producer closed&quot;);</stringProp>
         <stringProp name="filename"></stringProp>
       </ResultCollector>
       <hashTree/>
-      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
-        <boolProp name="ResultCollector.error_logging">false</boolProp>
-        <objProp>
-          <name>saveConfig</name>
-          <value class="SampleSaveConfiguration">
-            <time>true</time>
-            <latency>true</latency>
-            <timestamp>true</timestamp>
-            <success>true</success>
-            <label>true</label>
-            <code>true</code>
-            <message>true</message>
-            <threadName>true</threadName>
-            <dataType>true</dataType>
-            <encoding>false</encoding>
-            <assertions>true</assertions>
-            <subresults>true</subresults>
-            <responseData>false</responseData>
-            <samplerData>false</samplerData>
-            <xml>false</xml>
-            <fieldNames>true</fieldNames>
-            <responseHeaders>false</responseHeaders>
-            <requestHeaders>false</requestHeaders>
-            <responseDataOnError>false</responseDataOnError>
-            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
-            <assertionsResultsToSave>0</assertionsResultsToSave>
-            <bytes>true</bytes>
-            <sentBytes>true</sentBytes>
-            <url>true</url>
-            <threadCounts>true</threadCounts>
-            <idleTime>true</idleTime>
-            <connectTime>true</connectTime>
-          </value>
-        </objProp>
-        <stringProp name="filename"></stringProp>
-      </ResultCollector>
-      <hashTree/>
-      <ResultCollector guiclass="StatGraphVisualizer" testclass="ResultCollector" testname="Aggregate Graph" enabled="true">
+      <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
