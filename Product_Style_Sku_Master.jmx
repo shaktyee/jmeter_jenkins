@@ -90,16 +90,16 @@ props.put(&quot;producer&quot;, producer);
         </JSR223Sampler>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Style_Master - Thread Group" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Sku_Master - Thread Group" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${__P(users_style,1)}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">${__P(rampup__style,1)}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(users_sku,1)}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${__P(rampup__sku,1)}</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">${__P(duration_style,30)}</stringProp>
+        <stringProp name="ThreadGroup.duration">${__P(duration_sku,30)}</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
@@ -180,21 +180,21 @@ producer.send(record);
         </JSR223Sampler>
         <hashTree/>
         <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer" enabled="true">
-          <stringProp name="throughput">${__P(throughput_style,10)}</stringProp>
+          <stringProp name="throughput">${__P(throughput_sku,10)}</stringProp>
           <intProp name="calcMode">0</intProp>
         </ConstantThroughputTimer>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Sku_Master - Thread Group" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Style_Master - Thread Group" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${__P(users_sku,1)}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">${__P(rampup_sku,1)}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(users_style,1)}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${__P(rampup_style,1)}</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">${__P(duration_sku,50)}</stringProp>
+        <stringProp name="ThreadGroup.duration">${__P(duration_style,50)}</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
@@ -359,7 +359,7 @@ producer.send(record);
         </JSR223Sampler>
         <hashTree/>
         <ConstantThroughputTimer guiclass="TestBeanGUI" testclass="ConstantThroughputTimer" testname="Constant Throughput Timer" enabled="true">
-          <stringProp name="throughput">${__P(throughput_sku,10)}</stringProp>
+          <stringProp name="throughput">${__P(throughput_style,10)}</stringProp>
           <intProp name="calcMode">0</intProp>
         </ConstantThroughputTimer>
         <hashTree/>
