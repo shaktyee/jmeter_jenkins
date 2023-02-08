@@ -99,7 +99,7 @@ props.put(&quot;producer&quot;, producer);
         <stringProp name="ThreadGroup.num_threads">${__P(users_sku,1)}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(rampup__sku,1)}</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">${__P(duration_sku,30)}</stringProp>
+        <stringProp name="ThreadGroup.duration">${__P(duration_sku,15)}</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
@@ -194,7 +194,7 @@ producer.send(record);
         <stringProp name="ThreadGroup.num_threads">${__P(users_style,1)}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(rampup_style,1)}</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">${__P(duration_style,50)}</stringProp>
+        <stringProp name="ThreadGroup.duration">${__P(duration_style,15)}</stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
@@ -462,7 +462,7 @@ log.info(&quot;Producer closed&quot;);</stringProp>
             <connectTime>true</connectTime>
           </value>
         </objProp>
-        <stringProp name="filename">Report_${__time(MM-dd-yyyy-HH-mm-ss,)}.csv</stringProp>
+        <stringProp name="filename">bin/Report_${__time(MM-dd-yyyy-HH-mm-ss,)}.csv</stringProp>
       </ResultCollector>
       <hashTree/>
       <BackendListener guiclass="BackendListenerGui" testclass="BackendListener" testname="Backend Listener" enabled="true">
