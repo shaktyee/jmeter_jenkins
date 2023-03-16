@@ -25,7 +25,17 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: run jmeter on github action
-  # You may pin to the exact commit or the version.
-  # uses: sebiboga/run-jmeter-github-action@53e2ada91578ce1540dbf4359cdeccb9c6656176
-        uses: sebiboga/run-jmeter-github-action@v0.0.4
+      - name: PerfAction for JMeter
+        # You may pin to the exact commit or the version.
+        # uses: QAInsights/PerfAction@f3959d0a69e7f23949add25d7e34a3ae167d6443
+        uses: QAInsights/PerfAction@v3.1
+        with:
+          # jmeter test plan to execute
+          test-plan-path: './ODS_delete.jmx'
+          
+          
+      - name: Upload Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: jmeter-results
+          path: result.jtl
